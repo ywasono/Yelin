@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, FormEvent } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { Globe, MapPin, Phone, Mail, ChevronDown, Menu, X, Award, Handshake, Leaf, CheckCircle2, Truck, Search, Sun, MessageCircle } from 'lucide-react';
 import { translations, Language } from './translations';
@@ -7,6 +7,21 @@ export default function App() {
   const [lang, setLang] = useState<Language>('id');
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  const [currentMawIndex, setCurrentMawIndex] = useState(0);
+  const [formData, setFormData] = useState({
+    firstName: '',
+    lastName: '',
+    email: '',
+    message: ''
+  });
+  const [status, setStatus] = useState<'idle' | 'submitting' | 'success' | 'error'>('idle');
+
+  const fishMawImages = [
+    "https://i.postimg.cc/s2bdKNM0/maw1.jpg",
+    "https://i.postimg.cc/vmCFXN4j/maw2.jpg",
+    "https://i.postimg.cc/rp7XgPDP/maw3.jpg",
+    "https://i.postimg.cc/KY1hP286/maw4.jpg"
+  ];
 
   const t = translations[lang];
 
@@ -16,42 +31,61 @@ export default function App() {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setCurrentMawIndex((prev) => (prev + 1) % fishMawImages.length);
+    }, 3000);
+    return () => clearInterval(timer);
+  }, []);
+
   const toggleLang = (newLang: Language) => {
     setLang(newLang);
     setIsMenuOpen(false);
   };
 
+  const handleSubmit = async (e: FormEvent) => {
+    e.preventDefault();
+    setStatus('submitting');
+
+    try {
+      const response = await fetch('/api/contact', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formData),
+      });
+
+      if (response.ok) {
+        setStatus('success');
+        setFormData({ firstName: '', lastName: '', email: '', message: '' });
+        setTimeout(() => setStatus('idle'), 5000);
+      } else {
+        setStatus('error');
+      }
+    } catch (error) {
+      console.error('Submission error:', error);
+      setStatus('error');
+    }
+  };
+
   return (
     <div className="min-h-screen bg-white font-sans text-gray-900 overflow-x-hidden selection:bg-green-100 selection:text-green-900">
-      {/* WhatsApp Floating Button */}
-      <motion.a
-        href="https://wa.me/6281234567890"
-        target="_blank"
-        rel="noopener noreferrer"
-        initial={{ scale: 0, opacity: 0 }}
-        animate={{ scale: 1, opacity: 1 }}
-        whileHover={{ scale: 1.1 }}
-        className="fixed bottom-8 right-8 z-50 w-16 h-16 bg-[#25D366] text-white rounded-full flex items-center justify-center shadow-2xl hover:bg-[#20ba5a] transition-colors group"
-      >
-        <MessageCircle size={32} />
-        <span className="absolute right-full mr-4 bg-white text-gray-900 px-4 py-2 rounded-xl text-sm font-bold shadow-xl opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap border border-gray-100">
-          Chat with us
-        </span>
-      </motion.a>
-
       {/* Navigation */}
       <nav className={`fixed top-0 w-full z-50 transition-all duration-300 ${scrolled ? 'bg-white/90 backdrop-blur-md shadow-sm py-3' : 'bg-transparent py-6'}`}>
         <div className="max-w-7xl mx-auto px-6 flex justify-between items-center">
           <div className="flex items-center gap-3">
-            <div className="relative flex items-center justify-center">
-              <div className="w-12 h-12 bg-white rounded-xl shadow-sm flex items-center justify-center border border-green-100 overflow-hidden">
-                <Leaf className="text-green-600" size={28} fill="currentColor" fillOpacity={0.2} />
-              </div>
-              <div className="absolute -bottom-1 -right-1 w-6 h-6 bg-green-600 rounded-lg flex items-center justify-center text-white font-bold text-[10px] shadow-sm">YL</div>
+            <div className="bg-white p-1 rounded-lg shadow-sm">
+              <img 
+                src="https://i.postimg.cc/SKHFVvX0/yelin_logo.jpg" 
+                alt="CV Yelin Shan Hang Logo" 
+                className="h-10 w-auto"
+                referrerPolicy="no-referrer"
+              />
             </div>
             <div className="flex flex-col">
-              <span className={`font-bold text-xl leading-tight tracking-tight ${scrolled ? 'text-gray-900' : 'text-white'}`}>CV Yelin Shan Hang</span>
-              <span className={`text-[10px] font-medium tracking-[0.2em] uppercase ${scrolled ? 'text-gray-500' : 'text-white/70'}`}>Hasil Laut & Hasil Bumi</span>
+              <span className={`font-bold text-lg leading-tight tracking-tight ${scrolled ? 'text-gray-900' : 'text-white'}`}>CV Yelin Shan Hang</span>
+              <span className={`text-[9px] font-medium tracking-[0.2em] uppercase ${scrolled ? 'text-gray-500' : 'text-white/70'}`}>Hasil Laut & Hasil Bumi</span>
             </div>
           </div>
 
@@ -221,9 +255,14 @@ export default function App() {
                 <span className="w-8 h-8 bg-blue-600 text-white rounded-lg flex items-center justify-center text-sm">M</span>
                 {t.about.mission.title}
               </h3>
-              <p className="text-gray-700 text-lg leading-relaxed">
-                {t.about.mission.content}
-              </p>
+              <ul className="space-y-3">
+                {t.about.mission.items.map((item, index) => (
+                  <li key={index} className="flex gap-3 text-gray-700 leading-relaxed">
+                    <span className="text-blue-600 font-bold">•</span>
+                    <span>{item}</span>
+                  </li>
+                ))}
+              </ul>
             </motion.div>
           </div>
 
@@ -308,27 +347,106 @@ export default function App() {
             <p className="text-gray-600 max-w-2xl mx-auto text-lg">{t.agricultural.description}</p>
           </div>
 
-          <div className="grid md:grid-cols-1 gap-12 items-center">
+          <div className="grid md:grid-cols-2 gap-8">
+            {/* Nutmeg Shell */}
             <motion.div 
-              whileHover={{ scale: 1.02 }}
-              className="bg-white rounded-3xl shadow-xl overflow-hidden flex flex-col md:flex-row border border-green-50"
+              whileHover={{ y: -10 }}
+              className="bg-white rounded-3xl shadow-xl overflow-hidden border border-green-50 flex flex-col"
             >
-              <div className="md:w-1/2 h-64 md:h-auto">
+              <div className="h-64">
                 <img 
                   src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRUKiB0YgssNje-pe00CRBBpdmuc9jPvlcwwE_3zfyjPwDgQOZuVOFSHDx8&s=10" 
-                  alt="Nutmeg Seeds" 
+                  alt="Nutmeg Shell" 
                   className="w-full h-full object-cover"
                   referrerPolicy="no-referrer"
                 />
               </div>
-              <div className="md:w-1/2 p-10 flex flex-col justify-center">
-                <span className="text-green-600 font-semibold uppercase tracking-widest text-sm mb-2">Premium Quality</span>
-                <h3 className="text-3xl font-bold mb-4">{t.agricultural.products.nutmegShell.name}</h3>
-                <p className="text-gray-600 text-lg leading-relaxed mb-6">
+              <div className="p-8 flex flex-col flex-grow">
+                <span className="text-green-600 font-semibold uppercase tracking-widest text-xs mb-2">Premium Quality</span>
+                <h3 className="text-2xl font-bold mb-3">{t.agricultural.products.nutmegShell.name}</h3>
+                <p className="text-gray-600 leading-relaxed mb-6 flex-grow">
                   {t.agricultural.products.nutmegShell.desc}
                 </p>
-                <div className="flex items-center gap-2 text-green-700 font-medium">
-                  <Globe size={20} />
+                <div className="flex items-center gap-2 text-green-700 font-medium text-sm">
+                  <Globe size={16} />
+                  <span>Export Standard</span>
+                </div>
+              </div>
+            </motion.div>
+
+            {/* Nutmeg No Shell */}
+            <motion.div 
+              whileHover={{ y: -10 }}
+              className="bg-white rounded-3xl shadow-xl overflow-hidden border border-green-50 flex flex-col"
+            >
+              <div className="h-64">
+                <img 
+                  src="https://i.postimg.cc/8CxQw0FQ/nutmeg_no_shell.jpg" 
+                  alt="Nutmeg No Shell" 
+                  className="w-full h-full object-cover"
+                  referrerPolicy="no-referrer"
+                />
+              </div>
+              <div className="p-8 flex flex-col flex-grow">
+                <span className="text-green-600 font-semibold uppercase tracking-widest text-xs mb-2">Premium Quality</span>
+                <h3 className="text-2xl font-bold mb-3">{t.agricultural.products.nutmegNoShell.name}</h3>
+                <p className="text-gray-600 leading-relaxed mb-6 flex-grow">
+                  {t.agricultural.products.nutmegNoShell.desc}
+                </p>
+                <div className="flex items-center gap-2 text-green-700 font-medium text-sm">
+                  <Globe size={16} />
+                  <span>Export Standard</span>
+                </div>
+              </div>
+            </motion.div>
+
+            {/* Long Nutmeg */}
+            <motion.div 
+              whileHover={{ y: -10 }}
+              className="bg-white rounded-3xl shadow-xl overflow-hidden border border-green-50 flex flex-col"
+            >
+              <div className="h-64">
+                <img 
+                  src="https://i.postimg.cc/5Nj5M4p7/long_nutmeg.jpg" 
+                  alt="Long Nutmeg" 
+                  className="w-full h-full object-cover"
+                  referrerPolicy="no-referrer"
+                />
+              </div>
+              <div className="p-8 flex flex-col flex-grow">
+                <span className="text-green-600 font-semibold uppercase tracking-widest text-xs mb-2">Premium Quality</span>
+                <h3 className="text-2xl font-bold mb-3">{t.agricultural.products.longNutmeg.name}</h3>
+                <p className="text-gray-600 leading-relaxed mb-6 flex-grow">
+                  {t.agricultural.products.longNutmeg.desc}
+                </p>
+                <div className="flex items-center gap-2 text-green-700 font-medium text-sm">
+                  <Globe size={16} />
+                  <span>Export Standard</span>
+                </div>
+              </div>
+            </motion.div>
+
+            {/* Cloves */}
+            <motion.div 
+              whileHover={{ y: -10 }}
+              className="bg-white rounded-3xl shadow-xl overflow-hidden border border-green-50 flex flex-col"
+            >
+              <div className="h-64">
+                <img 
+                  src="https://i.postimg.cc/VL59cf4H/cloves.jpg" 
+                  alt="Cloves" 
+                  className="w-full h-full object-cover"
+                  referrerPolicy="no-referrer"
+                />
+              </div>
+              <div className="p-8 flex flex-col flex-grow">
+                <span className="text-green-600 font-semibold uppercase tracking-widest text-xs mb-2">Premium Quality</span>
+                <h3 className="text-2xl font-bold mb-3">{t.agricultural.products.cloves.name}</h3>
+                <p className="text-gray-600 leading-relaxed mb-6 flex-grow">
+                  {t.agricultural.products.cloves.desc}
+                </p>
+                <div className="flex items-center gap-2 text-green-700 font-medium text-sm">
+                  <Globe size={16} />
                   <span>Export Standard</span>
                 </div>
               </div>
@@ -362,7 +480,7 @@ export default function App() {
             >
               <div className="h-64">
                 <img 
-                  src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSOcz3QkQd3W3xEixl5BB4dJdHu5Wv0kBaPcqChutlxeeeRDqvtYlYEwweV&s=10" 
+                  src="https://i.postimg.cc/vZt5r4mP/seaworm.jpg" 
                   alt="Dried Seaworm" 
                   className="w-full h-full object-cover"
                   referrerPolicy="no-referrer"
@@ -380,13 +498,28 @@ export default function App() {
               whileHover={{ y: -10 }}
               className="bg-white/10 backdrop-blur-md rounded-3xl overflow-hidden border border-white/20"
             >
-              <div className="h-64">
-                <img 
-                  src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ7yvGMZAomAy6olcygYYfSLIryYgT9eO080CLGU5KmYw&s=10" 
-                  alt="Dried Fish Maw" 
-                  className="w-full h-full object-cover"
-                  referrerPolicy="no-referrer"
-                />
+              <div className="h-64 relative overflow-hidden">
+                <AnimatePresence mode="wait">
+                  <motion.img 
+                    key={currentMawIndex}
+                    src={fishMawImages[currentMawIndex]} 
+                    alt={`Dried Fish Maw ${currentMawIndex + 1}`} 
+                    initial={{ opacity: 0, scale: 1.1 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    exit={{ opacity: 0, scale: 0.95 }}
+                    transition={{ duration: 0.8 }}
+                    className="absolute inset-0 w-full h-full object-cover"
+                    referrerPolicy="no-referrer"
+                  />
+                </AnimatePresence>
+                <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-2 z-10">
+                  {fishMawImages.map((_, idx) => (
+                    <div 
+                      key={idx}
+                      className={`w-2 h-2 rounded-full transition-all duration-300 ${idx === currentMawIndex ? 'bg-white w-4' : 'bg-white/50'}`}
+                    />
+                  ))}
+                </div>
               </div>
               <div className="p-8">
                 <h3 className="text-2xl font-bold mb-3">{t.marine.products.driedFishMaw.name}</h3>
@@ -423,48 +556,92 @@ export default function App() {
                 </div>
                 <div className="flex gap-4">
                   <div className="w-12 h-12 bg-green-100 text-green-600 rounded-2xl flex items-center justify-center shrink-0">
-                    <Phone size={24} />
-                  </div>
-                  <div>
-                    <h4 className="font-bold text-lg mb-1">Phone / WhatsApp</h4>
-                    <p className="text-gray-600">+62 812-3456-7890</p>
-                  </div>
-                </div>
-                <div className="flex gap-4">
-                  <div className="w-12 h-12 bg-green-100 text-green-600 rounded-2xl flex items-center justify-center shrink-0">
                     <Mail size={24} />
                   </div>
                   <div>
                     <h4 className="font-bold text-lg mb-1">Email</h4>
-                    <p className="text-gray-600">info@yelingshanhang.com</p>
+                    <p className="text-gray-600">88yl.yelin@gmail.com</p>
                   </div>
                 </div>
               </div>
             </motion.div>
             
             <div className="bg-white p-8 rounded-3xl shadow-xl border border-gray-100">
-              <form className="space-y-4">
+              <form className="space-y-4" onSubmit={handleSubmit}>
                 <div className="grid grid-cols-2 gap-4">
                   <div className="space-y-2">
-                    <label className="text-sm font-medium text-gray-700">First Name</label>
-                    <input type="text" className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:ring-2 focus:ring-green-500 outline-none transition-all" />
+                    <label className="text-sm font-medium text-gray-700">{t.contact.form.firstName}</label>
+                    <input 
+                      type="text" 
+                      required
+                      value={formData.firstName}
+                      onChange={(e) => setFormData({ ...formData, firstName: e.target.value })}
+                      className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:ring-2 focus:ring-green-500 outline-none transition-all" 
+                    />
                   </div>
                   <div className="space-y-2">
-                    <label className="text-sm font-medium text-gray-700">Last Name</label>
-                    <input type="text" className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:ring-2 focus:ring-green-500 outline-none transition-all" />
+                    <label className="text-sm font-medium text-gray-700">{t.contact.form.lastName}</label>
+                    <input 
+                      type="text" 
+                      value={formData.lastName}
+                      onChange={(e) => setFormData({ ...formData, lastName: e.target.value })}
+                      className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:ring-2 focus:ring-green-500 outline-none transition-all" 
+                    />
                   </div>
                 </div>
                 <div className="space-y-2">
-                  <label className="text-sm font-medium text-gray-700">Email</label>
-                  <input type="email" className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:ring-2 focus:ring-green-500 outline-none transition-all" />
+                  <label className="text-sm font-medium text-gray-700">{t.contact.form.email}</label>
+                  <input 
+                    type="email" 
+                    required
+                    value={formData.email}
+                    onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                    className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:ring-2 focus:ring-green-500 outline-none transition-all" 
+                  />
                 </div>
                 <div className="space-y-2">
-                  <label className="text-sm font-medium text-gray-700">Message</label>
-                  <textarea rows={4} className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:ring-2 focus:ring-green-500 outline-none transition-all"></textarea>
+                  <label className="text-sm font-medium text-gray-700">{t.contact.form.message}</label>
+                  <textarea 
+                    rows={4} 
+                    required
+                    value={formData.message}
+                    onChange={(e) => setFormData({ ...formData, message: e.target.value })}
+                    className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:ring-2 focus:ring-green-500 outline-none transition-all"
+                  ></textarea>
                 </div>
-                <button className="w-full py-4 bg-green-600 hover:bg-green-700 text-white rounded-xl font-bold transition-all shadow-lg shadow-green-900/10">
-                  Send Message
+                <button 
+                  disabled={status === 'submitting'}
+                  className={`w-full py-4 rounded-xl font-bold transition-all shadow-lg ${
+                    status === 'submitting' 
+                      ? 'bg-gray-400 cursor-not-allowed' 
+                      : 'bg-green-600 hover:bg-green-700 text-white shadow-green-900/10'
+                  }`}
+                >
+                  {status === 'submitting' ? t.contact.form.submitting : t.contact.form.submit}
                 </button>
+                
+                <AnimatePresence>
+                  {status === 'success' && (
+                    <motion.p 
+                      initial={{ opacity: 0, height: 0 }}
+                      animate={{ opacity: 1, height: 'auto' }}
+                      exit={{ opacity: 0, height: 0 }}
+                      className="text-green-600 text-sm font-medium text-center mt-2"
+                    >
+                      {t.contact.form.success}
+                    </motion.p>
+                  )}
+                  {status === 'error' && (
+                    <motion.p 
+                      initial={{ opacity: 0, height: 0 }}
+                      animate={{ opacity: 1, height: 'auto' }}
+                      exit={{ opacity: 0, height: 0 }}
+                      className="text-red-600 text-sm font-medium text-center mt-2"
+                    >
+                      {t.contact.form.error}
+                    </motion.p>
+                  )}
+                </AnimatePresence>
               </form>
             </div>
           </div>

@@ -20,7 +20,7 @@ export interface Translation {
     };
     mission: {
       title: string;
-      content: string;
+      items: string[];
     };
     values: {
       title: string;
@@ -36,6 +36,18 @@ export interface Translation {
     description: string;
     products: {
       nutmegShell: {
+        name: string;
+        desc: string;
+      };
+      nutmegNoShell: {
+        name: string;
+        desc: string;
+      };
+      longNutmeg: {
+        name: string;
+        desc: string;
+      };
+      cloves: {
         name: string;
         desc: string;
       };
@@ -59,6 +71,16 @@ export interface Translation {
     title: string;
     address: string;
     location: string;
+    form: {
+      firstName: string;
+      lastName: string;
+      email: string;
+      message: string;
+      submit: string;
+      submitting: string;
+      success: string;
+      error: string;
+    };
   };
   stats: {
     experience: string;
@@ -96,11 +118,16 @@ export const translations: Record<Language, Translation> = {
       title: 'Profil Perusahaan',
       vision: {
         title: 'Visi',
-        content: 'Menjadi mitra ekspor terkemuka yang menghubungkan kekayaan alam Indonesia dengan pasar global melalui kualitas dan kepercayaan.',
+        content: 'Menghasilkan produk perikanan bermutu tinggi dan aman dikonsumsi serta bernilai tinggi sehingga mampu bersaing di pasar domestik maupun internasional',
       },
       mission: {
         title: 'Misi',
-        content: 'Menyediakan produk hasil bumi dan laut terbaik dengan standar internasional, memberdayakan sumber daya lokal, dan menjamin kepuasan pelanggan melalui layanan yang unggul.',
+        items: [
+          'Menerapkan sistem jaminan mutu dan keamanan pangan secara konsisten dan berkelanjutan sejak penerimaan bahan baku sampai dengan produksi akhir',
+          'Menggunakan sumber daya manusia yang kompeten',
+          'Menyediakan sarana dan prasarana yang memadai sesuai dengan konsepsi HACCP',
+          'Mengutamakan kepuasan pelanggan',
+        ],
       },
       values: {
         title: 'Nilai Kami',
@@ -116,8 +143,20 @@ export const translations: Record<Language, Translation> = {
       description: 'Kami menyediakan hasil bumi berkualitas tinggi untuk pasar internasional.',
       products: {
         nutmegShell: {
-          name: 'Cangkang Pala (Nutmeg Shell)',
-          desc: 'Cangkang pala berkualitas tinggi, diproses dengan standar ekspor.',
+          name: 'Pala dengan Cangkang (Nutmeg with Shell)',
+          desc: 'Pala dengan cangkang berkualitas tinggi, diproses dengan standar ekspor.',
+        },
+        nutmegNoShell: {
+          name: 'Pala Tanpa Cangkang (Nutmeg No Shell)',
+          desc: 'Pala kupas berkualitas tinggi, siap untuk diproses lebih lanjut.',
+        },
+        longNutmeg: {
+          name: 'Pala Lonjong (Long Nutmeg)',
+          desc: 'Varian pala lonjong dengan aroma dan kualitas yang khas.',
+        },
+        cloves: {
+          name: 'Cengkeh (Cloves)',
+          desc: 'Cengkeh kering berkualitas premium dari petani lokal pilihan.',
         },
       },
     },
@@ -130,23 +169,33 @@ export const translations: Record<Language, Translation> = {
           desc: 'Cacing laut pilihan yang dikeringkan secara sempurna.',
         },
         driedFishMaw: {
-          name: 'Gelembung Ikan Kering (Dried Fish Maw)',
-          desc: 'Gelembung ikan premium dengan nilai nutrisi tinggi.',
+          name: 'Perut Ikan Kering (Dried Fish Maw)',
+          desc: 'Perut ikan premium dengan nilai nutrisi tinggi.',
         },
       },
     },
     contact: {
       title: 'Hubungi Kami',
       address: 'Alamat Kami',
-      location: 'Mutiara Margomulyo Indah Blok K, 21, Manukan Wetan, Tandes, Kota Surabaya, Jawa Timur, Indonesia',
+      location: 'Mutiara Margomulyo Indah, Manukan Wetan, Tandes, Kota Surabaya, Jawa Timur, Indonesia',
+      form: {
+        firstName: 'Nama Depan',
+        lastName: 'Nama Belakang',
+        email: 'Email',
+        message: 'Pesan',
+        submit: 'Kirim Pesan',
+        submitting: 'Mengirim...',
+        success: 'Pesan berhasil dikirim!',
+        error: 'Gagal mengirim pesan. Silakan coba lagi.',
+      },
     },
     stats: {
-      experience: '10+',
-      countries: '15+',
+      experience: '8+',
+      countries: '2+',
       volume: '1000+',
       experienceLabel: 'Tahun Pengalaman',
       countriesLabel: 'Negara Tujuan',
-      volumeLabel: 'Ton Produk Terkirim',
+      volumeLabel: 'Ton Terkirim',
     },
     process: {
       title: 'Proses Kualitas Kami',
@@ -174,11 +223,16 @@ export const translations: Record<Language, Translation> = {
       title: 'Company Profile',
       vision: {
         title: 'Vision',
-        content: 'To be a leading export partner connecting Indonesia\'s natural wealth with the global market through quality and trust.',
+        content: 'To produce high-quality, safe-to-consume, and high-value fishery products that are competitive in both domestic and international markets',
       },
       mission: {
         title: 'Mission',
-        content: 'To provide the best agricultural and marine products with international standards, empower local resources, and ensure customer satisfaction through superior service.',
+        items: [
+          'Consistently and sustainably implement quality assurance and food safety systems from raw material reception to final production',
+          'Employ competent human resources',
+          'Provide adequate facilities and infrastructure in accordance with HACCP concepts',
+          'Prioritize customer satisfaction',
+        ],
       },
       values: {
         title: 'Our Values',
@@ -196,6 +250,18 @@ export const translations: Record<Language, Translation> = {
         nutmegShell: {
           name: 'Nutmeg Shell',
           desc: 'High-quality nutmeg shells, processed with export standards.',
+        },
+        nutmegNoShell: {
+          name: 'Nutmeg No Shell',
+          desc: 'High-quality peeled nutmeg, ready for further processing.',
+        },
+        longNutmeg: {
+          name: 'Long Nutmeg',
+          desc: 'Long nutmeg variant with distinctive aroma and quality.',
+        },
+        cloves: {
+          name: 'Cloves',
+          desc: 'Premium quality dried cloves from selected local farmers.',
         },
       },
     },
@@ -216,14 +282,24 @@ export const translations: Record<Language, Translation> = {
     contact: {
       title: 'Contact Us',
       address: 'Our Address',
-      location: 'Mutiara Margomulyo Indah Blok K, 21, Manukan Wetan, Tandes, Surabaya City, East Java, Indonesia',
+      location: 'Mutiara Margomulyo Indah, Manukan Wetan, Tandes, Surabaya City, East Java, Indonesia',
+      form: {
+        firstName: 'First Name',
+        lastName: 'Last Name',
+        email: 'Email',
+        message: 'Message',
+        submit: 'Send Message',
+        submitting: 'Sending...',
+        success: 'Message sent successfully!',
+        error: 'Failed to send message. Please try again.',
+      },
     },
     stats: {
-      experience: '10+',
-      countries: '15+',
+      experience: '8+',
+      countries: '2+',
       volume: '1000+',
       experienceLabel: 'Years Experience',
-      countriesLabel: 'Export Countries',
+      countriesLabel: 'Destination Countries',
       volumeLabel: 'Tons Shipped',
     },
     process: {
@@ -252,11 +328,16 @@ export const translations: Record<Language, Translation> = {
       title: '公司简介',
       vision: {
         title: '愿景',
-        content: '成为领先的出口合作伙伴，通过质量和信任将印度尼西亚的自然财富与全球市场联系起来。',
+        content: '生产高质量、安全食用且高价值的水产品，使其在国内外市场具有竞争力',
       },
       mission: {
         title: '使命',
-        content: '以国际标准提供最好的农产品和海产品，增强当地资源，并通过卓越的服务确保客户满意。',
+        items: [
+          '从原材料接收到最终生产，始终如一且可持续地实施质量保证和食品安全体系',
+          '聘用称职的人力资源',
+          '根据 HACCP 概念提供充足的设施和基础设施',
+          '优先考虑客户满意度',
+        ],
       },
       values: {
         title: '我们的价值观',
@@ -274,6 +355,18 @@ export const translations: Record<Language, Translation> = {
         nutmegShell: {
           name: '肉豆蔻壳',
           desc: '优质肉豆蔻壳，按出口标准加工。',
+        },
+        nutmegNoShell: {
+          name: '去壳肉豆蔻',
+          desc: '高品质去壳肉豆蔻，可供进一步加工。',
+        },
+        longNutmeg: {
+          name: '长肉豆蔻',
+          desc: '具有独特香气和品质的长肉豆蔻品种。',
+        },
+        cloves: {
+          name: '丁香',
+          desc: '来自精选当地农民的优质干丁香。',
         },
       },
     },
@@ -294,14 +387,24 @@ export const translations: Record<Language, Translation> = {
     contact: {
       title: '联系我们',
       address: '我们的地址',
-      location: 'Mutiara Margomulyo Indah Blok K, 21, Manukan Wetan, Tandes, 泗水市, 东爪哇省, 印度尼西亚',
+      location: 'Mutiara Margomulyo Indah, Manukan Wetan, Tandes, 泗水市, 东爪哇省, 印度尼西亚',
+      form: {
+        firstName: '名字',
+        lastName: '姓氏',
+        email: '电子邮件',
+        message: '信息',
+        submit: '发送信息',
+        submitting: '发送中...',
+        success: '信息发送成功！',
+        error: '发送失败。请重试。',
+      },
     },
     stats: {
-      experience: '10+',
-      countries: '15+',
+      experience: '8+',
+      countries: '2+',
       volume: '1000+',
       experienceLabel: '年经验',
-      countriesLabel: '出口国家',
+      countriesLabel: '目标国家',
       volumeLabel: '已运送吨数',
     },
     process: {
