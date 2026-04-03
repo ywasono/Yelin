@@ -3,6 +3,17 @@ import { motion, AnimatePresence } from 'motion/react';
 import { Globe, MapPin, Phone, Mail, ChevronDown, Menu, X, Award, Handshake, Leaf, CheckCircle2, Truck, Search, Sun, MessageCircle } from 'lucide-react';
 import { translations, Language } from './translations';
 
+import logo from './assets/logo-cvyl.jpg';
+import nutmegShell from './assets/nutmeg-shell.jpg';
+import nutmegNoShell from './assets/nutmeg-no-shell.jpg';
+import nutmegLong from './assets/nutmeg-long.jpg';
+import cloves from './assets/cloves.jpg';
+import driedSeaworm from './assets/dried-seaworm.jpg';
+import fishMaw1 from './assets/fish-maw-1.jpg';
+import fishMaw2 from './assets/fish-maw-2.jpg';
+import fishMaw3 from './assets/fish-maw-3.jpg';
+import fishMaw4 from './assets/fish-maw-4.jpg';
+
 export default function App() {
   const [lang, setLang] = useState<Language>('id');
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -17,10 +28,10 @@ export default function App() {
   const [status, setStatus] = useState<'idle' | 'submitting' | 'success' | 'error'>('idle');
 
   const fishMawImages = [
-    "fish-maw-1.jpg",
-    "fish-maw-2.jpg",
-    "fish-maw-3.jpg",
-    "fish-maw-4.jpg"
+    fishMaw1,
+    fishMaw2,
+    fishMaw3,
+    fishMaw4
   ];
 
   const t = translations[lang];
@@ -77,7 +88,7 @@ export default function App() {
           <div className="flex items-center gap-3">
             <div className="bg-white p-1 rounded-lg shadow-sm">
               <img 
-                src="logo-cvyl.jpg" 
+                src={logo} 
                 alt="CV Yelin Shan Hang Logo" 
                 className="h-10 w-auto"
                 referrerPolicy="no-referrer"
@@ -355,7 +366,7 @@ export default function App() {
             >
               <div className="h-64">
                 <img 
-                  src="nutmeg-shell.jpg" 
+                  src={nutmegShell} 
                   alt="Nutmeg Shell" 
                   className="w-full h-full object-cover"
                   referrerPolicy="no-referrer"
@@ -381,7 +392,7 @@ export default function App() {
             >
               <div className="h-64">
                 <img 
-                  src="nutmeg-no-shell.jpg" 
+                  src={nutmegNoShell} 
                   alt="Nutmeg No Shell" 
                   className="w-full h-full object-cover"
                   referrerPolicy="no-referrer"
@@ -407,7 +418,7 @@ export default function App() {
             >
               <div className="h-64">
                 <img 
-                  src="nutmeg-long.jpg" 
+                  src={nutmegLong} 
                   alt="Long Nutmeg" 
                   className="w-full h-full object-cover"
                   referrerPolicy="no-referrer"
@@ -433,7 +444,7 @@ export default function App() {
             >
               <div className="h-64">
                 <img 
-                  src="cloves.jpg" 
+                  src={cloves} 
                   alt="Cloves" 
                   className="w-full h-full object-cover"
                   referrerPolicy="no-referrer"
@@ -480,7 +491,7 @@ export default function App() {
             >
               <div className="h-64">
                 <img 
-                  src="dried-seaworm.jpg" 
+                  src={driedSeaworm} 
                   alt="Dried Seaworm" 
                   className="w-full h-full object-cover"
                   referrerPolicy="no-referrer"
