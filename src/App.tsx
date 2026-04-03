@@ -158,7 +158,7 @@ export default function App() {
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8 }}
-            className="text-5xl md:text-8xl font-bold text-white mb-6 tracking-tight"
+            className="text-4xl sm:text-5xl md:text-7xl lg:text-8xl font-bold text-white mb-6 tracking-tight whitespace-nowrap"
           >
             {t.hero.title}
           </motion.h1>
