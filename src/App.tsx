@@ -17,10 +17,10 @@ export default function App() {
   const [status, setStatus] = useState<'idle' | 'submitting' | 'success' | 'error'>('idle');
 
   const fishMawImages = [
-    "/fish-maw-1.jpg",
-    "/fish-maw-2.jpg",
-    "/fish-maw-3.jpg",
-    "/fish-maw-4.jpg"
+    "fish-maw-1.jpg",
+    "fish-maw-2.jpg",
+    "fish-maw-3.jpg",
+    "fish-maw-4.jpg"
   ];
 
   const t = translations[lang];
@@ -77,7 +77,7 @@ export default function App() {
           <div className="flex items-center gap-3">
             <div className="bg-white p-1 rounded-lg shadow-sm">
               <img 
-                src="/logo-cvyl.jpg" 
+                src="logo-cvyl.jpg" 
                 alt="CV Yelin Shan Hang Logo" 
                 className="h-10 w-auto"
                 referrerPolicy="no-referrer"
@@ -355,7 +355,7 @@ export default function App() {
             >
               <div className="h-64">
                 <img 
-                  src="/nutmeg-shell.jpg" 
+                  src="nutmeg-shell.jpg" 
                   alt="Nutmeg Shell" 
                   className="w-full h-full object-cover"
                   referrerPolicy="no-referrer"
@@ -381,7 +381,7 @@ export default function App() {
             >
               <div className="h-64">
                 <img 
-                  src="/nutmeg-no-shell.jpg" 
+                  src="nutmeg-no-shell.jpg" 
                   alt="Nutmeg No Shell" 
                   className="w-full h-full object-cover"
                   referrerPolicy="no-referrer"
@@ -407,7 +407,7 @@ export default function App() {
             >
               <div className="h-64">
                 <img 
-                  src="/nutmeg-long.jpg" 
+                  src="nutmeg-long.jpg" 
                   alt="Long Nutmeg" 
                   className="w-full h-full object-cover"
                   referrerPolicy="no-referrer"
@@ -433,7 +433,7 @@ export default function App() {
             >
               <div className="h-64">
                 <img 
-                  src="/cloves.jpg" 
+                  src="cloves.jpg" 
                   alt="Cloves" 
                   className="w-full h-full object-cover"
                   referrerPolicy="no-referrer"
@@ -480,7 +480,7 @@ export default function App() {
             >
               <div className="h-64">
                 <img 
-                  src="/dried-seaworm.jpg" 
+                  src="dried-seaworm.jpg" 
                   alt="Dried Seaworm" 
                   className="w-full h-full object-cover"
                   referrerPolicy="no-referrer"
